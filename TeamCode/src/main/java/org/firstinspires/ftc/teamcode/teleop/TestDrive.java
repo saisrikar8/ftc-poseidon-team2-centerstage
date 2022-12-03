@@ -94,7 +94,7 @@ public class TestDrive extends OpMode {
         } else if(gamepad2.left_stick_y < -0.02 && linearTicks <= 4300) {
             linearTicks += 5;
             board.moveSlide(linearTicks);
-        } else if(gamepad2.left_stick_y > 0.02 && linearTicks >= 150) {
+        } else if(gamepad2.left_stick_y > 0.02 && linearTicks >= 0) {
             linearTicks -= 5;
             board.moveSlide(linearTicks);
         }

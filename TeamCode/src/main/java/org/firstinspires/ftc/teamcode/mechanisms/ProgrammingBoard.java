@@ -27,9 +27,9 @@ public class ProgrammingBoard {
      * Define slide positions
      */
     public final int FLOOR = 0;
-    public final int LOWPOLE = 1800;
-    public final int MIDPOLE = 3050;
-    public final int HIPOLE = 4150;
+    public final int LOWPOLE = 1585;
+    public final int MIDPOLE = 2725;
+    public final int HIPOLE = 3810;
     /*
     public final int FLOOR = 150;
     public final int LOWPOLE = 1950;
