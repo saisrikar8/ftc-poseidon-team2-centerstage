@@ -19,15 +19,22 @@ public class AutoLeft extends LinearOpMode{
 
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
 
-        Trajectory trajectory = drive.trajectoryBuilder(new Pose2d())
-                .forward(20)
+        Trajectory traj1 = drive.trajectoryBuilder(new Pose2d())
+                .strafeLeft(24)
                 .build();
-
+        Trajectory traj2 = drive.trajectoryBuilder(traj1.end())
+                .forward(50)
+                .build();
+        Trajectory traj3 = drive.trajectoryBuilder(traj2.end())
+                .strafeRight(10)
+                .build();
         waitForStart();
 
         if (isStopRequested()) return;
 
-        drive.followTrajectory(trajectory);
+        drive.followTrajectory(traj1);
+        drive.followTrajectory(traj2);
+        drive.followTrajectory(traj3);
 
         while (!isStopRequested() && opModeIsActive()) ;
     }
