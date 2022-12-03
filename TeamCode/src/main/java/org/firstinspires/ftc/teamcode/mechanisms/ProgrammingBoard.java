@@ -94,7 +94,7 @@ public class ProgrammingBoard {
 
     public void releaseClaw() {
 
-        claw.setPosition(0.3);
+        claw.setPosition(0.4);
     }
     public void closeClaw() {
         claw.setPosition(0.65);
