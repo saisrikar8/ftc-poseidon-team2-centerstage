@@ -8,12 +8,15 @@ import org.firstinspires.ftc.teamcode.mechanisms.ProgrammingBoard;
 public class TestDrive extends OpMode {
     ProgrammingBoard board = new ProgrammingBoard();
     private int linearTicks;
+    private String stage;
     @Override
     public void init() {
         telemetry.addData("TeleOp Code Running","Wait for hardware initialization");
         board.init(hardwareMap);
         telemetry.addData("Robot Hardware Initialized Successfully in TeleOp", "Press Play to Start");
+        board.releaseClaw();
         linearTicks = board.FLOOR;;
+        stage = "FLOOR";
     }
 
     /***
@@ -58,48 +61,42 @@ public class TestDrive extends OpMode {
          * **/
 
         if(gamepad2.left_bumper) {
-            // board.claw.setPosition(0.0);
-            // move to 180 degrees.
             board.releaseClaw();
         } else if (gamepad2.right_bumper) {
-            // board.claw.setPosition(0.2);
-            // move to 40 degrees.
             board.closeClaw();
         }
+
         if (gamepad2.a) {
             linearTicks = board.FLOOR;
             board.moveSlide(linearTicks);
+            stage = "FLOOR";
             telemetry.addData("Linear Slide Stage", "FLOOR");
-            // board.moveSlide(board.FLOOR);
-            // board.claw.setPosition(0.65);
-
         } else if (gamepad2.x) {
             linearTicks = board.LOWPOLE;
             board.moveSlide(linearTicks);
+            stage = "LOWPOLE";
             telemetry.addData("Linear Slide Stage", "LOWPOLE");
-            // board.moveSlide(board.LOWPOLE);
-            // board.claw.setPosition(0.7);
-
         } else if(gamepad2.y) {
             linearTicks = board.MIDPOLE;
             board.moveSlide(linearTicks);
+            stage = "MIDPOLE";
             telemetry.addData("Linear Slide Stage", "MIDPOLE");
-            // board.moveSlide(board.MIDPOLE);
-
         } else if(gamepad2.b) {
             linearTicks = board.HIPOLE;
             board.moveSlide(linearTicks);
-            telemetry.addData("Linear Slide Stage", "HIPOLE");
-            // board.moveSlide(board.HIPOLE);
+            stage = "HIPOLE";
         } else if(gamepad2.left_stick_y < -0.02 && linearTicks <= 4300) {
             linearTicks += 5;
             board.moveSlide(linearTicks);
+            stage = "In between";
         } else if(gamepad2.left_stick_y > 0.02 && linearTicks >= 0) {
             linearTicks -= 5;
             board.moveSlide(linearTicks);
+            stage = "In between";
         }
         telemetry.addData("Linear Ticks", linearTicks);
         telemetry.addData("Servo Position", board.getPosition());
+        telemetry.addData("Linear Slide Stage", stage);
         /*
         // testing claw servo positions
         if (gamepad1.a) {
