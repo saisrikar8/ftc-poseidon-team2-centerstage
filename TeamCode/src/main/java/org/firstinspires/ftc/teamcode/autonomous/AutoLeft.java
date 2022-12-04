@@ -36,9 +36,14 @@ public class AutoLeft extends LinearOpMode{
                 })
                 .build();
         Trajectory traj3 = drive.trajectoryBuilder(traj2.end())
-                .strafeRight(19)
+                .strafeRight(16)
                 .build();
-
+        Trajectory traj4 = drive.trajectoryBuilder(traj3.end())
+                .back(1)
+                .build();
+        Trajectory traj5 = drive.trajectoryBuilder(traj4.end().plus(new Pose2d(0, 0, Math.toRadians(-90))))
+                .forward(36)
+                .build();
         waitForStart();
 
         if (isStopRequested()) return;
@@ -50,6 +55,14 @@ public class AutoLeft extends LinearOpMode{
         drive.followTrajectory(traj2);
         drive.followTrajectory(traj3);
         drive.releaseClaw();
+        drive.followTrajectory(traj4);
+        drive.turn(Math.toRadians(-90));
+        drive.moveSlide(600);
+        drive.followTrajectory(traj5);
+        drive.closeClaw();
+        sleep(1000);
+        drive.moveSlide(1625);
+
 
         while (!isStopRequested() && opModeIsActive()) ;
     }
