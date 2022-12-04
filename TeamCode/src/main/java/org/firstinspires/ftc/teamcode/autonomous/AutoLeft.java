@@ -22,29 +22,33 @@ public class AutoLeft extends LinearOpMode{
         Telemetry telemetry = new MultipleTelemetry(this.telemetry, FtcDashboard.getInstance().getTelemetry());
 
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
-        drive.releaseClaw();
+
         Trajectory traj1 = drive.trajectoryBuilder(new Pose2d())
-                .strafeLeft(40)
+                .strafeLeft(33)
                 .build();
         Trajectory traj2 = drive.trajectoryBuilder(traj1.end())
-                .forward(50)
-                .addDisplacementMarker(20, () -> {
-                    drive.closeClaw();
+                .forward(54)
+                .addDisplacementMarker(15, () -> {
+                    drive.moveSlide(HIPOLE);
                     // This marker runs 20 inches into the trajectory
 
                     // Run your action in here!
                 })
                 .build();
         Trajectory traj3 = drive.trajectoryBuilder(traj2.end())
-                .strafeRight(10)
+                .strafeRight(5)
                 .build();
+
         waitForStart();
 
         if (isStopRequested()) return;
 
+        drive.closeClaw();
+        drive.moveSlide(400);
         drive.followTrajectory(traj1);
         drive.followTrajectory(traj2);
         drive.followTrajectory(traj3);
+        drive.releaseClaw();
 
         while (!isStopRequested() && opModeIsActive()) ;
     }
