@@ -27,8 +27,8 @@ public class AutoLeft extends LinearOpMode{
                 .strafeLeft(33)
                 .build();
         Trajectory traj2 = drive.trajectoryBuilder(traj1.end())
-                .forward(54)
-                .addDisplacementMarker(15, () -> {
+                .forward(55)
+                .addDisplacementMarker(10, () -> {
                     drive.moveSlide(HIPOLE);
                     // This marker runs 20 inches into the trajectory
 
@@ -36,7 +36,7 @@ public class AutoLeft extends LinearOpMode{
                 })
                 .build();
         Trajectory traj3 = drive.trajectoryBuilder(traj2.end())
-                .strafeRight(5)
+                .strafeRight(19)
                 .build();
 
         waitForStart();
@@ -44,7 +44,8 @@ public class AutoLeft extends LinearOpMode{
         if (isStopRequested()) return;
 
         drive.closeClaw();
-        drive.moveSlide(400);
+        sleep(1000);
+        drive.moveSlide(200);
         drive.followTrajectory(traj1);
         drive.followTrajectory(traj2);
         drive.followTrajectory(traj3);
