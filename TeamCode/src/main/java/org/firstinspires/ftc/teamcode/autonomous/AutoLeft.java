@@ -51,7 +51,7 @@ public class AutoLeft extends LinearOpMode{
                 .back(12.5)
                 .build();
         Trajectory forward3 = drive.trajectoryBuilder(back2.end().plus(new Pose2d(0, 0, Math.toRadians(-90))))
-                .forward(1.5)
+                .forward(1)
                 .build();
         waitForStart();
 
