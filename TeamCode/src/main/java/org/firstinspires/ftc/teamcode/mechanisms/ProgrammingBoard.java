@@ -44,7 +44,7 @@ public class ProgrammingBoard {
     /**
      * Power of linear slide
      */
-    double slidePower = 0.5;
+    double slidePower = 0.90;
     // double drive;  //  Power for forward and back motion
     // double strafe;  // Power for left and right motion
     // double rotate;  // Power for rotating the robot
@@ -93,7 +93,6 @@ public class ProgrammingBoard {
     }
 
     public void releaseClaw() {
-
         claw.setPosition(0.4);
     }
     public void closeClaw() {

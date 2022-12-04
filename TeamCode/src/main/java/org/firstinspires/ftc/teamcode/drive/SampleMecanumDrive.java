@@ -23,6 +23,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType;
 
@@ -71,8 +72,12 @@ public class SampleMecanumDrive extends MecanumDrive {
     private DcMotorEx leftFront, leftRear, rightRear, rightFront;
     private List<DcMotorEx> motors;
 
+    public Servo claw;
+    private DcMotor linearSlide;
+
     private BNO055IMU imu;
     private VoltageSensor batteryVoltageSensor;
+    double slidePower = 0.90;
 
     public SampleMecanumDrive(HardwareMap hardwareMap) {
         super(kV, kA, kStatic, TRACK_WIDTH, TRACK_WIDTH, LATERAL_MULTIPLIER);
@@ -93,6 +98,9 @@ public class SampleMecanumDrive extends MecanumDrive {
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
         parameters.angleUnit = BNO055IMU.AngleUnit.RADIANS;
         imu.initialize(parameters);
+        // initialize claw and linear slide
+        claw = hardwareMap.get(Servo.class, "claw");
+        linearSlide = hardwareMap.get(DcMotor.class, "linearSlide");
 
         // TODO: If the hub containing the IMU you are using is mounted so that the "REV" logo does
         // not face up, remap the IMU axes so that the z-axis points upward (normal to the floor.)
@@ -288,6 +296,18 @@ public class SampleMecanumDrive extends MecanumDrive {
             wheelVelocities.add(encoderTicksToInches(motor.getVelocity()));
         }
         return wheelVelocities;
+    }
+
+    public void releaseClaw() {
+        claw.setPosition(0.4);
+    }
+    public void closeClaw() {
+        claw.setPosition(0.65);
+    }
+    public void moveSlide(int slidePos) {
+        linearSlide.setTargetPosition(slidePos);
+        linearSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        linearSlide.setPower(slidePower);
     }
 
     @Override

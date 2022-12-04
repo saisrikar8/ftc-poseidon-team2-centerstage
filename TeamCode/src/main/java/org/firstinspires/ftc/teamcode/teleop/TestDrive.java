@@ -15,7 +15,7 @@ public class TestDrive extends OpMode {
         board.init(hardwareMap);
         telemetry.addData("Robot Hardware Initialized Successfully in TeleOp", "Press Play to Start");
         board.releaseClaw();
-        linearTicks = board.FLOOR;;
+        linearTicks = board.FLOOR;
         stage = "FLOOR";
     }
 
