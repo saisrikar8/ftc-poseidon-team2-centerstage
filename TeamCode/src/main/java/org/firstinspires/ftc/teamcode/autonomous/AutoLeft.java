@@ -23,10 +23,10 @@ public class AutoLeft extends LinearOpMode{
 
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
 
-        Trajectory traj1 = drive.trajectoryBuilder(new Pose2d())
-                .strafeLeft(33)
+        Trajectory left1 = drive.trajectoryBuilder(new Pose2d())
+                .strafeLeft(32.5)
                 .build();
-        Trajectory traj2 = drive.trajectoryBuilder(traj1.end())
+        Trajectory forward1 = drive.trajectoryBuilder(left1.end())
                 .forward(55)
                 .addDisplacementMarker(10, () -> {
                     drive.moveSlide(HIPOLE);
@@ -35,20 +35,23 @@ public class AutoLeft extends LinearOpMode{
                     // Run your action in here!
                 })
                 .build();
-        Trajectory traj3 = drive.trajectoryBuilder(traj2.end())
+        Trajectory right1 = drive.trajectoryBuilder(forward1.end())
                 .strafeRight(16)
                 .build();
-        Trajectory traj4 = drive.trajectoryBuilder(traj3.end())
-                .back(1)
+        Trajectory back1 = drive.trajectoryBuilder(right1.end())
+                .back(3)
                 .build();
-        Trajectory traj5 = drive.trajectoryBuilder(traj4.end().plus(new Pose2d(0, 0, Math.toRadians(-90))))
+        Trajectory forward2 = drive.trajectoryBuilder(back1.end().plus(new Pose2d(0, 0, Math.toRadians(-90))))
                 .forward(36)
                 .build();
-        Trajectory traj6 = drive.trajectoryBuilder(traj5.end())
-                .back(16)
+        Trajectory right2 = drive.trajectoryBuilder(forward2.end())
+                .strafeRight(3.5)
                 .build();
-        Trajectory traj7 = drive.trajectoryBuilder(traj6.end().plus(new Pose2d(0, 0, Math.toRadians(-90))))
-                .forward(5)
+        Trajectory back2 = drive.trajectoryBuilder(right2.end())
+                .back(12.5)
+                .build();
+        Trajectory forward3 = drive.trajectoryBuilder(back2.end().plus(new Pose2d(0, 0, Math.toRadians(-90))))
+                .forward(1.5)
                 .build();
         waitForStart();
 
@@ -57,20 +60,21 @@ public class AutoLeft extends LinearOpMode{
         drive.closeClaw();
         sleep(1000);
         drive.moveSlide(200);
-        drive.followTrajectory(traj1);
-        drive.followTrajectory(traj2);
-        drive.followTrajectory(traj3);
+        drive.followTrajectory(left1);
+        drive.followTrajectory(forward1);
+        drive.followTrajectory(right1);
         drive.releaseClaw();
-        drive.followTrajectory(traj4);
+        drive.followTrajectory(back1);
         drive.turn(Math.toRadians(-90));
         drive.moveSlide(600);
-        drive.followTrajectory(traj5);
+        drive.followTrajectory(forward2);
         drive.closeClaw();
         sleep(1000);
         drive.moveSlide(1625);
-        drive.followTrajectory(traj6);
+        drive.followTrajectory(right2);
+        drive.followTrajectory(back2);
         drive.turn(Math.toRadians(-90));
-        drive.followTrajectory(traj7);
+        drive.followTrajectory(forward3);
         drive.releaseClaw();
 
 
