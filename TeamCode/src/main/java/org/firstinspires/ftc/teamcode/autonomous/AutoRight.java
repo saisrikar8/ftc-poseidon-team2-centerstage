@@ -110,7 +110,7 @@ public class AutoRight extends LinearOpMode {
                 .back(3)
                 .build();
         Trajectory forward2 = drive.trajectoryBuilder(back1.end().plus(new Pose2d(0, 0, Math.toRadians(-90))))
-                .forward(36)
+                .forward(35.5)
                 .build();
         Trajectory right2 = drive.trajectoryBuilder(forward2.end())
                 .strafeRight(3.5)
@@ -147,12 +147,12 @@ public class AutoRight extends LinearOpMode {
 
         if(tagOfInterest.id == LEFT || tagOfInterest == null){
             Trajectory traj = drive.trajectoryBuilder(forward3.end())
-                    .strafeRight(30)
+                    .strafeRight(43.5)
                     .build();
             drive.followTrajectory(traj);
         }else if(tagOfInterest.id == MIDDLE){
             Trajectory traj = drive.trajectoryBuilder(forward3.end())
-                    .strafeRight(12)
+                    .strafeRight(16)
                     .build();
             drive.followTrajectory(traj);
         }else {
