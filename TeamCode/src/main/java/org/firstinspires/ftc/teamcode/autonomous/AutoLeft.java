@@ -108,7 +108,7 @@ public class AutoLeft extends LinearOpMode{
                 .back(4)
                 .build();
         Trajectory forward2 = drive.trajectoryBuilder(back1.end().plus(new Pose2d(0, 0, Math.toRadians(90))))
-                .forward(33)
+                .forward(31.5)
                 .build();
         Trajectory right2 = drive.trajectoryBuilder(forward2.end())
                 .strafeRight(3.5)
