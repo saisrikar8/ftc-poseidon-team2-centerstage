@@ -64,7 +64,7 @@ public class AutoRight extends LinearOpMode {
         camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
             @Override
             public void onOpened() {
-                camera.startStreaming(320, 240, OpenCvCameraRotation.UPRIGHT);
+                camera.startStreaming(1280, 960, OpenCvCameraRotation.UPRIGHT);
             }
 
             @Override
@@ -161,6 +161,7 @@ public class AutoRight extends LinearOpMode {
                     .build();
             drive.followTrajectory(traj);
         }
+        drive.moveSlide(FLOOR);
 
 
         while (!isStopRequested() && opModeIsActive()) ;

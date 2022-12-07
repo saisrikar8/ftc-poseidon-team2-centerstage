@@ -63,7 +63,7 @@ public class AutoLeft extends LinearOpMode{
         camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
             @Override
             public void onOpened() {
-                camera.startStreaming(320, 240, OpenCvCameraRotation.UPRIGHT);
+                camera.startStreaming(1280, 960, OpenCvCameraRotation.UPRIGHT);
             }
 
             @Override
@@ -108,7 +108,7 @@ public class AutoLeft extends LinearOpMode{
                 .back(4)
                 .build();
         Trajectory forward2 = drive.trajectoryBuilder(back1.end().plus(new Pose2d(0, 0, Math.toRadians(90))))
-                .forward(31.5)
+                .forward(29.0)
                 .build();
         Trajectory right2 = drive.trajectoryBuilder(forward2.end())
                 .strafeRight(3.5)
@@ -136,7 +136,7 @@ public class AutoLeft extends LinearOpMode{
         drive.followTrajectory(forward2);
         drive.closeClaw();
         sleep(1000);
-        drive.moveSlide(1625);
+        drive.moveSlide(LOWPOLE);
         drive.followTrajectory(right2);
         drive.followTrajectory(back2);
         drive.turn(Math.toRadians(90));
@@ -158,6 +158,7 @@ public class AutoLeft extends LinearOpMode{
                     .build();
             drive.followTrajectory(traj);
         }
+        drive.moveSlide(FLOOR);
 
 
         while (!isStopRequested() && opModeIsActive()) ;
