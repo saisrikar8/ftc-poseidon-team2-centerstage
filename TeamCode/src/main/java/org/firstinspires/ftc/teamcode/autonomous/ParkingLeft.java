@@ -94,12 +94,6 @@ public class ParkingLeft extends LinearOpMode{
                 .build();
         Trajectory forward1 = drive.trajectoryBuilder(right1.end())
                 .forward(51.5)
-                .addDisplacementMarker(10, () -> {
-                    drive.moveSlide(HIPOLE);
-                    // This marker runs 20 inches into the trajectory
-
-                    // Run your action in here!
-                })
                 .build();
         waitForStart();
 
@@ -111,7 +105,7 @@ public class ParkingLeft extends LinearOpMode{
         drive.followTrajectory(forward1);
         if(tagOfInterest.id == LEFT || tagOfInterest == null){
             Trajectory traj = drive.trajectoryBuilder(forward1.end())
-                    .strafeRight(1)
+                    .strafeLeft(56)
                     .build();
             drive.followTrajectory(traj);
         }else if(tagOfInterest.id == MIDDLE){
@@ -121,7 +115,7 @@ public class ParkingLeft extends LinearOpMode{
             drive.followTrajectory(traj);
         }else {
             Trajectory traj = drive.trajectoryBuilder(forward1.end())
-                    .strafeLeft(53)
+                    .strafeRight(1)
                     .build();
             drive.followTrajectory(traj);
         }
