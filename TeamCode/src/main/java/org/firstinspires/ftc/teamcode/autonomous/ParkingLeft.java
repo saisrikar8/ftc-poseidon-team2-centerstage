@@ -107,22 +107,21 @@ public class ParkingLeft extends LinearOpMode{
 
         drive.closeClaw();
         sleep(1000);
-        drive.moveSlide(200);
         drive.followTrajectory(right1);
         drive.followTrajectory(forward1);
         if(tagOfInterest.id == LEFT || tagOfInterest == null){
             Trajectory traj = drive.trajectoryBuilder(forward1.end())
-                    .strafeRight(4)
+                    .strafeRight(1)
                     .build();
             drive.followTrajectory(traj);
         }else if(tagOfInterest.id == MIDDLE){
             Trajectory traj = drive.trajectoryBuilder(forward1.end())
-                    .strafeLeft(20)
+                    .strafeLeft(30)
                     .build();
             drive.followTrajectory(traj);
         }else {
             Trajectory traj = drive.trajectoryBuilder(forward1.end())
-                    .strafeLeft(43)
+                    .strafeLeft(53)
                     .build();
             drive.followTrajectory(traj);
         }
