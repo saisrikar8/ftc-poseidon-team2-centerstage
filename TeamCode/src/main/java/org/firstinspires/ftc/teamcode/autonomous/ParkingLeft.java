@@ -18,8 +18,8 @@ import org.openftc.easyopencv.OpenCvInternalCamera;
 
 import java.util.ArrayList;
 
-@Autonomous(name = "AutoLeft")
-public class AutoLeft extends LinearOpMode{
+@Autonomous(name = "ParkingLeft")
+public class ParkingLeft extends LinearOpMode{
     public final int FLOOR = 0;
     public final int LOWPOLE = 1625;
     public final int MIDPOLE = 2725;
@@ -101,24 +101,6 @@ public class AutoLeft extends LinearOpMode{
                     // Run your action in here!
                 })
                 .build();
-        Trajectory left1 = drive.trajectoryBuilder(forward1.end())
-                .strafeLeft(15)
-                .build();
-        Trajectory back1 = drive.trajectoryBuilder(left1.end())
-                .back(4)
-                .build();
-        Trajectory forward2 = drive.trajectoryBuilder(back1.end().plus(new Pose2d(0, 0, Math.toRadians(90))))
-                .forward(29.5)
-                .build();
-        Trajectory right2 = drive.trajectoryBuilder(forward2.end())
-                .strafeRight(3.5)
-                .build();
-        Trajectory back2 = drive.trajectoryBuilder(right2.end())
-                .back(13)
-                .build();
-        Trajectory forward3 = drive.trajectoryBuilder(back2.end().plus(new Pose2d(0, 0, Math.toRadians(90))))
-                .forward(1)
-                .build();
         waitForStart();
 
         if (isStopRequested()) return;
@@ -128,32 +110,18 @@ public class AutoLeft extends LinearOpMode{
         drive.moveSlide(200);
         drive.followTrajectory(right1);
         drive.followTrajectory(forward1);
-        drive.followTrajectory(left1);
-        drive.releaseClaw();
-        drive.followTrajectory(back1);
-        drive.turn(Math.toRadians(90));
-        drive.moveSlide(600);
-        drive.followTrajectory(forward2);
-        drive.closeClaw();
-        sleep(1000);
-        drive.moveSlide(LOWPOLE);
-        drive.followTrajectory(right2);
-        drive.followTrajectory(back2);
-        drive.turn(Math.toRadians(90));
-        drive.followTrajectory(forward3);
-        drive.releaseClaw();
         if(tagOfInterest.id == LEFT || tagOfInterest == null){
-            Trajectory traj = drive.trajectoryBuilder(forward3.end())
-                    .strafeRight(16)
+            Trajectory traj = drive.trajectoryBuilder(forward1.end())
+                    .strafeRight(4)
                     .build();
             drive.followTrajectory(traj);
         }else if(tagOfInterest.id == MIDDLE){
-            Trajectory traj = drive.trajectoryBuilder(forward3.end())
-                    .strafeLeft(12)
+            Trajectory traj = drive.trajectoryBuilder(forward1.end())
+                    .strafeLeft(20)
                     .build();
             drive.followTrajectory(traj);
         }else {
-            Trajectory traj = drive.trajectoryBuilder(forward3.end())
+            Trajectory traj = drive.trajectoryBuilder(forward1.end())
                     .strafeLeft(43)
                     .build();
             drive.followTrajectory(traj);

@@ -18,8 +18,8 @@ import org.openftc.easyopencv.OpenCvInternalCamera;
 
 import java.util.ArrayList;
 
-@Autonomous(name = "AutoLeft")
-public class AutoLeft extends LinearOpMode{
+@Autonomous(name = "ParkingRight")
+public class ParkingRight extends LinearOpMode{
     public final int FLOOR = 0;
     public final int LOWPOLE = 1625;
     public final int MIDPOLE = 2725;
@@ -89,35 +89,11 @@ public class AutoLeft extends LinearOpMode{
             }
         }
 
-        Trajectory right1 = drive.trajectoryBuilder(new Pose2d())
-                .strafeRight(25)
+        Trajectory left1 = drive.trajectoryBuilder(new Pose2d())
+                .strafeLeft(32.5)
                 .build();
-        Trajectory forward1 = drive.trajectoryBuilder(right1.end())
-                .forward(51.5)
-                .addDisplacementMarker(10, () -> {
-                    drive.moveSlide(HIPOLE);
-                    // This marker runs 20 inches into the trajectory
-
-                    // Run your action in here!
-                })
-                .build();
-        Trajectory left1 = drive.trajectoryBuilder(forward1.end())
-                .strafeLeft(15)
-                .build();
-        Trajectory back1 = drive.trajectoryBuilder(left1.end())
-                .back(4)
-                .build();
-        Trajectory forward2 = drive.trajectoryBuilder(back1.end().plus(new Pose2d(0, 0, Math.toRadians(90))))
-                .forward(29.5)
-                .build();
-        Trajectory right2 = drive.trajectoryBuilder(forward2.end())
-                .strafeRight(3.5)
-                .build();
-        Trajectory back2 = drive.trajectoryBuilder(right2.end())
-                .back(13)
-                .build();
-        Trajectory forward3 = drive.trajectoryBuilder(back2.end().plus(new Pose2d(0, 0, Math.toRadians(90))))
-                .forward(1)
+        Trajectory forward1 = drive.trajectoryBuilder(left1.end())
+                .forward(51)
                 .build();
         waitForStart();
 
@@ -125,36 +101,22 @@ public class AutoLeft extends LinearOpMode{
 
         drive.closeClaw();
         sleep(1000);
-        drive.moveSlide(200);
-        drive.followTrajectory(right1);
-        drive.followTrajectory(forward1);
         drive.followTrajectory(left1);
-        drive.releaseClaw();
-        drive.followTrajectory(back1);
-        drive.turn(Math.toRadians(90));
-        drive.moveSlide(600);
-        drive.followTrajectory(forward2);
-        drive.closeClaw();
-        sleep(1000);
-        drive.moveSlide(LOWPOLE);
-        drive.followTrajectory(right2);
-        drive.followTrajectory(back2);
-        drive.turn(Math.toRadians(90));
-        drive.followTrajectory(forward3);
-        drive.releaseClaw();
+        drive.followTrajectory(forward1);
+
         if(tagOfInterest.id == LEFT || tagOfInterest == null){
-            Trajectory traj = drive.trajectoryBuilder(forward3.end())
-                    .strafeRight(16)
+            Trajectory traj = drive.trajectoryBuilder(forward1.end())
+                    .strafeLeft(16)
                     .build();
             drive.followTrajectory(traj);
         }else if(tagOfInterest.id == MIDDLE){
-            Trajectory traj = drive.trajectoryBuilder(forward3.end())
-                    .strafeLeft(12)
+            Trajectory traj = drive.trajectoryBuilder(forward1.end())
+                    .strafeRight(20)
                     .build();
             drive.followTrajectory(traj);
         }else {
-            Trajectory traj = drive.trajectoryBuilder(forward3.end())
-                    .strafeLeft(43)
+            Trajectory traj = drive.trajectoryBuilder(forward1.end())
+                    .strafeRight(43)
                     .build();
             drive.followTrajectory(traj);
         }
