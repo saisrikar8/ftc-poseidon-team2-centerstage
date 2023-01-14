@@ -110,7 +110,6 @@ public class CloseConeLeft extends LinearOpMode {
         sleep(1000);
         drive.moveSlide(200);
         drive.followTrajectory(right1);
-        sleep(1000);
         drive.moveSlide(LOWPOLE);
         sleep(1000);
         drive.followTrajectory(forward1);
