@@ -106,7 +106,7 @@ public class ParkingCloseRight extends LinearOpMode {
 
         if(tagOfInterest.id == LEFT || tagOfInterest == null){
             Trajectory traj = drive.trajectoryBuilder(forward1.end())
-                    .strafeLeft(27)
+                    .strafeLeft(25)
                     .build();
             drive.followTrajectory(traj);
         }else if(tagOfInterest.id == MIDDLE){
@@ -116,7 +116,7 @@ public class ParkingCloseRight extends LinearOpMode {
             drive.followTrajectory(traj);
         }else {
             Trajectory traj = drive.trajectoryBuilder(forward1.end())
-                    .strafeRight(28)
+                    .strafeRight(30)
                     .build();
             drive.followTrajectory(traj);
         }

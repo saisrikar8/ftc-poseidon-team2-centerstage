@@ -117,7 +117,7 @@ public class ParkingCloseLeft extends LinearOpMode {
             drive.followTrajectory(traj);
         }else {
             Trajectory traj = drive.trajectoryBuilder(forward1.end())
-                    .strafeRight(28)
+                    .strafeRight(30)
                     .build();
             drive.followTrajectory(traj);
         }
