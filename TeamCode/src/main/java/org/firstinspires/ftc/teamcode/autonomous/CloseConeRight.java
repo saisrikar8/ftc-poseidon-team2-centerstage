@@ -122,7 +122,7 @@ public class CloseConeRight extends LinearOpMode {
 
         if(tagOfInterest.id == LEFT || tagOfInterest == null){
             Trajectory traj = drive.trajectoryBuilder(forward2.end())
-                    .strafeLeft(15)
+                    .strafeLeft(25)
                     .build();
             drive.followTrajectory(traj);
         }else if(tagOfInterest.id == MIDDLE){
@@ -132,7 +132,7 @@ public class CloseConeRight extends LinearOpMode {
             drive.followTrajectory(traj);
         }else {
             Trajectory traj = drive.trajectoryBuilder(forward2.end())
-                    .strafeRight(15)
+                    .strafeRight(25)
                     .build();
             drive.followTrajectory(traj);
         }

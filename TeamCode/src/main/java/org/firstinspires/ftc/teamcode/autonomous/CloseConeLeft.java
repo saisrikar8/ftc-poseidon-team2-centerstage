@@ -94,13 +94,13 @@ public class CloseConeLeft extends LinearOpMode {
                 .strafeRight(10)
                 .build();
         Trajectory forward1 = drive.trajectoryBuilder(right1.end())
-                .forward(8)
+                .forward(6.5)
                 .build();
         Trajectory left1 = drive.trajectoryBuilder(forward1.end())
                 .strafeLeft(14)
                 .build();
         Trajectory forward2 = drive.trajectoryBuilder(left1.end())
-                .forward(18)
+                .forward(20)
                 .build();
         waitForStart();
 
@@ -112,17 +112,18 @@ public class CloseConeLeft extends LinearOpMode {
         drive.followTrajectory(right1);
         sleep(1000);
         drive.moveSlide(LOWPOLE);
-        sleep(2000);
+        sleep(1000);
         drive.followTrajectory(forward1);
         drive.releaseClaw();
         drive.followTrajectory(left1);
         drive.moveSlide(FLOOR);
+        sleep(2000);
         drive.followTrajectory(forward2);
 
 
         if(tagOfInterest.id == LEFT || tagOfInterest == null){
             Trajectory traj = drive.trajectoryBuilder(forward2.end())
-                    .strafeLeft(15)
+                    .strafeLeft(27)
                     .build();
             drive.followTrajectory(traj);
         }else if(tagOfInterest.id == MIDDLE){
@@ -132,7 +133,7 @@ public class CloseConeLeft extends LinearOpMode {
             drive.followTrajectory(traj);
         }else {
             Trajectory traj = drive.trajectoryBuilder(forward2.end())
-                    .strafeRight(15)
+                    .strafeRight(28)
                     .build();
             drive.followTrajectory(traj);
         }
