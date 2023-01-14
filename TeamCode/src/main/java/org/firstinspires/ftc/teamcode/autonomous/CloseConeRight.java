@@ -95,7 +95,7 @@ public class CloseConeRight extends LinearOpMode {
                 .strafeLeft(18)
                 .build();
         Trajectory forward1 = drive.trajectoryBuilder(left1.end())
-                .forward(6.5)
+                .forward(7)
                 .build();
         Trajectory right1 = drive.trajectoryBuilder(forward1.end())
                 .strafeRight(14)
