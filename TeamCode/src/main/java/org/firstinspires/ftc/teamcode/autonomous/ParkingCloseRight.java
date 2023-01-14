@@ -92,16 +92,10 @@ public class ParkingCloseRight extends LinearOpMode {
 
 
         Trajectory left1 = drive.trajectoryBuilder(new Pose2d())
-                .strafeLeft(18)
+                .strafeLeft(7)
                 .build();
         Trajectory forward1 = drive.trajectoryBuilder(left1.end())
-                .forward(7)
-                .build();
-        Trajectory right1 = drive.trajectoryBuilder(forward1.end())
-                .strafeRight(14)
-                .build();
-        Trajectory forward2 = drive.trajectoryBuilder(right1.end())
-                .forward(20)
+                .forward(27)
                 .build();
         waitForStart();
 
@@ -109,21 +103,19 @@ public class ParkingCloseRight extends LinearOpMode {
 
         drive.followTrajectory(left1);
         drive.followTrajectory(forward1);
-        drive.followTrajectory(right1);
-        drive.followTrajectory(forward2);
 
         if(tagOfInterest.id == LEFT || tagOfInterest == null){
-            Trajectory traj = drive.trajectoryBuilder(forward2.end())
+            Trajectory traj = drive.trajectoryBuilder(forward1.end())
                     .strafeLeft(27)
                     .build();
             drive.followTrajectory(traj);
         }else if(tagOfInterest.id == MIDDLE){
-            Trajectory traj = drive.trajectoryBuilder(forward2.end())
+            Trajectory traj = drive.trajectoryBuilder(forward1.end())
                     .strafeRight(0)
                     .build();
             drive.followTrajectory(traj);
         }else {
-            Trajectory traj = drive.trajectoryBuilder(forward2.end())
+            Trajectory traj = drive.trajectoryBuilder(forward1.end())
                     .strafeRight(28)
                     .build();
             drive.followTrajectory(traj);

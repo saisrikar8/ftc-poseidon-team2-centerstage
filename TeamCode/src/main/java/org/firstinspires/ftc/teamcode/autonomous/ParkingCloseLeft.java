@@ -90,41 +90,33 @@ public class ParkingCloseLeft extends LinearOpMode {
             }
         }
 
-        Trajectory right1 = drive.trajectoryBuilder(new Pose2d())
-                .strafeRight(10)
+        Trajectory left1 = drive.trajectoryBuilder(new Pose2d())
+                .strafeLeft(5)
                 .build();
-        Trajectory forward1 = drive.trajectoryBuilder(right1.end())
-                .forward(6.5)
-                .build();
-        Trajectory left1 = drive.trajectoryBuilder(forward1.end())
-                .strafeLeft(14)
-                .build();
-        Trajectory forward2 = drive.trajectoryBuilder(left1.end())
-                .forward(20)
+        Trajectory forward1 = drive.trajectoryBuilder(left1.end())
+                .forward(26.5)
                 .build();
         waitForStart();
 
         if (isStopRequested()) return;
 
 
-        drive.followTrajectory(right1);
-        drive.followTrajectory(forward1);
         drive.followTrajectory(left1);
-        drive.followTrajectory(forward2);
+        drive.followTrajectory(forward1);
 
 
         if(tagOfInterest.id == LEFT || tagOfInterest == null){
-            Trajectory traj = drive.trajectoryBuilder(forward2.end())
+            Trajectory traj = drive.trajectoryBuilder(forward1.end())
                     .strafeLeft(27)
                     .build();
             drive.followTrajectory(traj);
         }else if(tagOfInterest.id == MIDDLE){
-            Trajectory traj = drive.trajectoryBuilder(forward2.end())
+            Trajectory traj = drive.trajectoryBuilder(forward1.end())
                     .strafeRight(0)
                     .build();
             drive.followTrajectory(traj);
         }else {
-            Trajectory traj = drive.trajectoryBuilder(forward2.end())
+            Trajectory traj = drive.trajectoryBuilder(forward1.end())
                     .strafeRight(28)
                     .build();
             drive.followTrajectory(traj);
