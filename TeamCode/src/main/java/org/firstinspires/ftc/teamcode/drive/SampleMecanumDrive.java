@@ -74,7 +74,8 @@ public class SampleMecanumDrive extends MecanumDrive {
     private List<DcMotorEx> motors;
 
     public Servo claw;
-    private DcMotor linearSlide;
+    private DcMotor linearSlide1, linearSlide2;
+    private DcMotor armRotation1, armRotation2;
 
     private BNO055IMU imu;
     private VoltageSensor batteryVoltageSensor;
@@ -99,11 +100,16 @@ public class SampleMecanumDrive extends MecanumDrive {
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
         parameters.angleUnit = BNO055IMU.AngleUnit.RADIANS;
         imu.initialize(parameters);
-        // initialize claw and linear slide
-        claw = hardwareMap.get(Servo.class, "claw");
-        linearSlide = hardwareMap.get(DcMotor.class, "linearSlide");
-        linearSlide.setDirection(DcMotorSimple.Direction.REVERSE);
-        linearSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        // initialize motors and servos
+        leftFront = hardwareMap.get(DcMotorEx.class, "front-left");
+        rightFront = hardwareMap.get(DcMotorEx.class, "front-right");
+        leftRear = hardwareMap.get(DcMotorEx.class, "rear-left");
+        rightRear = hardwareMap.get(DcMotorEx.class, "rear-right");
+        claw = hardwareMap.get(Servo.class, "claw-servo");
+        linearSlide1 = hardwareMap.get(DcMotorEx.class, "arm-extending-1");
+        linearSlide2 = hardwareMap.get(DcMotorEx.class, "arm-extension-2");
+        armRotation1 = hardwareMap.get(DcMotorEx.class, "arm-rotation-1");
+        armRotation2 = hardwareMap.get(DcMotorEx.class, "arm-rotation-2");
 
         // TODO: If the hub containing the IMU you are using is mounted so that the "REV" logo does
         // not face up, remap the IMU axes so that the z-axis points upward (normal to the floor.)
@@ -127,17 +133,6 @@ public class SampleMecanumDrive extends MecanumDrive {
         // For example, if +Y in this diagram faces downwards, you would use AxisDirection.NEG_Y.
         // BNO055IMUUtil.remapZAxis(imu, AxisDirection.NEG_Y);
 
-        leftFront = hardwareMap.get(DcMotorEx.class, "frontLeft");
-        leftRear = hardwareMap.get(DcMotorEx.class, "backLeft");
-        rightRear = hardwareMap.get(DcMotorEx.class, "backRight");
-        rightFront = hardwareMap.get(DcMotorEx.class, "frontRight");
-
-        /*
-        leftFront = hardwareMap.get(DcMotorEx.class, "frontRight");
-        leftRear = hardwareMap.get(DcMotorEx.class, "backRight");
-        rightRear = hardwareMap.get(DcMotorEx.class, "backLeft");
-        rightFront = hardwareMap.get(DcMotorEx.class, "frontLeft");
-        */
         motors = Arrays.asList(leftFront, leftRear, rightRear, rightFront);
 
         for (DcMotorEx motor : motors) {
@@ -305,12 +300,24 @@ public class SampleMecanumDrive extends MecanumDrive {
         claw.setPosition(0.4);
     }
     public void closeClaw() {
-        claw.setPosition(0.65);
+        claw.setPosition(0);
     }
     public void moveSlide(int slidePos) {
-        linearSlide.setTargetPosition(slidePos);
-        linearSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        linearSlide.setPower(slidePower);
+        linearSlide1.setTargetPosition(slidePos);
+        linearSlide1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        linearSlide2.setTargetPosition(slidePos);
+        linearSlide2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        linearSlide1.setPower(slidePower);
+        linearSlide2.setPower(slidePower);
+    }
+    //rotates arm given an angle in degrees
+    public void rotateArm(double rotations){
+        armRotation1.setTargetPosition((int)(rotations * 415.2));
+        armRotation1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        armRotation2.setTargetPosition((int)(rotations * 415.2));
+        armRotation2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        armRotation1.setPower(0.6);
+        armRotation2.setPower(0.6);
     }
 
     @Override
