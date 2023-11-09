@@ -16,35 +16,12 @@ import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 public class RedTopAutonomous extends LinearOpMode {
     private SampleMecanumDrive drive;
 
-    private DcMotor rearLeft;
-    private DcMotor rearRight;
-    private DcMotor frontLeft;
-    private DcMotor frontRight;
-
-    private DcMotor armRotationMotor1;
-    private DcMotor armRotationMotor2;
-
-    private DcMotor armExtendingMotor1;
-    private DcMotor armExtendingMotor2;
-
     private DistanceSensor propSensor;
 
     @Override
     public void runOpMode() throws InterruptedException {
         drive = new SampleMecanumDrive(hardwareMap);
         drive.setMotorPowers(1, 1, 1, 1);
-
-        rearLeft = hardwareMap.dcMotor.get("rear-left");
-        rearRight = hardwareMap.dcMotor.get("rear-right");
-        frontLeft = hardwareMap.dcMotor.get("front-left");
-        frontRight = hardwareMap.dcMotor.get("front-right");
-
-        armRotationMotor1 = hardwareMap.dcMotor.get("arm-rotation-1");
-        armRotationMotor2 = hardwareMap.dcMotor.get("arm-rotation-2");
-
-        armExtendingMotor1 = hardwareMap.dcMotor.get("arm-extending-1");
-        armExtendingMotor2 = hardwareMap.dcMotor.get("arm-extending-2");
-
         propSensor = hardwareMap.get(DistanceSensor.class, "prop-sensor");
 
         waitForStart();
@@ -55,6 +32,7 @@ public class RedTopAutonomous extends LinearOpMode {
         int propLocation;
         double propDistance;
         Pose2d firstEndPosition;
+
         Trajectory traj1 = drive.trajectoryBuilder(new Pose2d(70, 10, Math.toRadians(180)))
                 .forward(30)
                 .build();

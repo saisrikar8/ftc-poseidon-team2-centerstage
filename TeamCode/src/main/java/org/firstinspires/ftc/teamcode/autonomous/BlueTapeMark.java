@@ -5,9 +5,9 @@ public enum BlueTapeMark {
 
     private int num;
     BlueTapeMark(int i){
-        num = i
+        num = i;
     }
     int getValue(){
-        return num
+        return num;
     }
 }

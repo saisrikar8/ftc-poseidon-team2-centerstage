@@ -6,9 +6,9 @@ public enum RedTapeMark {
 
     private int num;
     RedTapeMark(int i) {
-        num = il
+        num = i;
     }
     int getValue(){
-        return num
+        return num;
     }
 }
