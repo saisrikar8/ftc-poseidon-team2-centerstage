@@ -73,9 +73,8 @@ public class SampleMecanumDrive extends MecanumDrive {
     private DcMotorEx leftFront, leftRear, rightRear, rightFront;
     private List<DcMotorEx> motors;
 
-    public Servo claw;
-    private DcMotor linearSlide1, linearSlide2;
-    private DcMotor armRotation1, armRotation2;
+    public Servo claw1, claw2;
+    private DcMotor linearSlide, armRotation;
 
     private BNO055IMU imu;
     private VoltageSensor batteryVoltageSensor;
@@ -105,11 +104,10 @@ public class SampleMecanumDrive extends MecanumDrive {
         rightFront = hardwareMap.get(DcMotorEx.class, "front-right");
         leftRear = hardwareMap.get(DcMotorEx.class, "rear-left");
         rightRear = hardwareMap.get(DcMotorEx.class, "rear-right");
-        claw = hardwareMap.get(Servo.class, "claw-servo");
-        linearSlide1 = hardwareMap.get(DcMotorEx.class, "arm-extending-1");
-        linearSlide2 = hardwareMap.get(DcMotorEx.class, "arm-extension-2");
-        armRotation1 = hardwareMap.get(DcMotorEx.class, "arm-rotation-1");
-        armRotation2 = hardwareMap.get(DcMotorEx.class, "arm-rotation-2");
+        claw1 = hardwareMap.get(Servo.class, "claw-1-servo");
+        claw2 = hardwareMap.get(Servo.class, "claw-2-servo");
+        linearSlide = hardwareMap.get(DcMotorEx.class, "arm-extension");
+        armRotation = hardwareMap.get(DcMotorEx.class, "arm-rotation");
 
         // TODO: If the hub containing the IMU you are using is mounted so that the "REV" logo does
         // not face up, remap the IMU axes so that the z-axis points upward (normal to the floor.)
@@ -295,29 +293,29 @@ public class SampleMecanumDrive extends MecanumDrive {
         }
         return wheelVelocities;
     }
-
-    public void releaseClaw() {
-        claw.setPosition(0.4);
+    //note: adjust claw open close positions
+    public void closeClaw1() {
+        claw1.setPosition(0);
     }
-    public void closeClaw() {
-        claw.setPosition(0);
+    public void openClaw1(){
+        claw1.setPosition(0.4);
     }
-    public void moveSlide(int slidePos) {
-        linearSlide1.setTargetPosition(slidePos);
-        linearSlide1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        linearSlide2.setTargetPosition(slidePos);
-        linearSlide2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        linearSlide1.setPower(slidePower);
-        linearSlide2.setPower(slidePower);
+    public void openClaw2(){
+        claw2.setPosition(0.4);
+    }
+    public void closeClaw2() {
+        claw2.setPosition(0.4);
+    }
+    //height in inches
+    public void moveSlide(int height) {
+        double rotationsPerInch = 8.1/38.4;
+        linearSlide.setTargetPosition((int)(rotationsPerInch * height*415.2));
+        linearSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     }
     //rotates arm given an angle in degrees
-    public void rotateArm(double rotations){
-        armRotation1.setTargetPosition((int)(rotations * 415.2));
-        armRotation1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        armRotation2.setTargetPosition((int)(rotations * 415.2));
-        armRotation2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        armRotation1.setPower(0.6);
-        armRotation2.setPower(0.6);
+    public void rotateArm(double degrees){
+        armRotation.setTargetPosition((int)((degrees/360) * 415.2));
+        armRotation.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     }
 
     @Override
