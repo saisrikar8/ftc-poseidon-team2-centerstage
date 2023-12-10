@@ -45,8 +45,7 @@ public class RedTopAutonomous extends LinearOpMode {
             drive.followTrajectory(traj1);
             drive.turn(-1 * Math.PI);
             firstEndPosition = new Pose2d(traj1.end().getX(), traj1.end().getY(), 0);
-            propDistance = getDistanceFromSensor(propSensor);
-            if (propDistance > 7 && propDistance < 9) {
+            if (detectProp()) {
                 propLocation = RedTapeMark.CENTER.getValue();
                 drive.moveSlide(8);
                 drive.openClaw1();
@@ -56,9 +55,8 @@ public class RedTopAutonomous extends LinearOpMode {
                         .strafeLeft(10)
                         .build();
                 drive.followTrajectory(traj2);
-                propDistance = getDistanceFromSensor(propSensor);
                 drive.moveSlide(4);
-                if (propDistance > 1 && propDistance < 3) {
+                if (detectProp()) {
                     propLocation = RedTapeMark.RIGHT.getValue();
                     drive.openClaw1();
                     sleep(100);
