@@ -70,6 +70,9 @@ public class SampleMecanumDrive extends MecanumDrive {
 
     private TrajectoryFollower follower;
 
+    public double armAngle = 0;
+    public double slidePos = 0;
+
     private DcMotorEx leftFront, leftRear, rightRear, rightFront;
     private List<DcMotorEx> motors;
 
@@ -307,23 +310,91 @@ public class SampleMecanumDrive extends MecanumDrive {
         claw2.setPosition(0.4);
     }
     //height in inches
-    public void moveSlide(int height) {
+    public void moveSlide(double height) {
         double rotationsPerInch = 8.1/38.4;
+        slidePos += height;
         linearSlide.setTargetPosition((int)(rotationsPerInch * height*415.2));
         linearSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     }
+
     //rotates arm given an angle in degrees
     public void rotateArm(double degrees){
+        armAngle += degrees;
         armRotation.setTargetPosition((int)((degrees/360) * 415.2));
         armRotation.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     }
 
+    //stops the robot (during teleop)
+    public void stopRobot(){
+        setMotorPowers(0,0,0,0);
+    }
+
+    //strafes robot to the right (during teleop)
+    public void rightStrafe(double power){
+        setMotorPowers(power, power, -1*power, -1*power);
+    }
+
+    //strafes robot to the left (during teleop)
+    public void leftStrafe(double power){
+        setMotorPowers(-1*power, -1*power, power, power);
+    }
+
+    // moves robot forward (during teleop)
+    public void moveForward(double power){
+        setMotorPowers(power, power, -power, -power);
+    }
+
+    //moves robot backward (during teleop)
+    public void moveBackward(double power){
+        setMotorPowers(-1*power, -1*power, power, power);
+    }
+
     @Override
-    public void setMotorPowers(double v, double v1, double v2, double v3) {
-        leftFront.setPower(v);
-        leftRear.setPower(v1);
-        rightRear.setPower(v2);
-        rightFront.setPower(v3);
+    public void setMotorPowers(double powerFrontLeft, double powerRearLeft, double powerRearRight, double powerFrontRight) {
+        leftFront.setPower(powerFrontLeft);
+        leftRear.setPower(powerRearLeft);
+        rightRear.setPower(powerRearRight);
+        rightFront.setPower(powerFrontRight);
+    }
+
+    public void moveRobot(double leftStickY, double leftStickX, double rightStickX, boolean snailMode){
+
+        /**
+         * Wheel powers calculated using gamepad 1's inputs leftStickY, leftStickX, and rightStickX
+         * **/
+        double turn = rightStickX;
+        double theta = Math.atan2(leftStickY, leftStickX);
+        double power;
+        if (snailMode){
+            power = 0.5;
+        }
+        else{
+            power = 1.0;
+        }
+
+        double sin = Math.sin(theta - Math.PI/4);
+        double cos = Math.cos(theta - Math.PI/4);
+        double max = Math.max(Math.abs(sin), Math.abs(cos));
+
+        double frontLeftPower = power * cos/max + turn;
+        double backLeftPower = power * sin/max + turn;
+        double frontRightPower = power * sin/max - turn;
+        double backRightPower = power * cos/max - turn;
+
+        if ((power + Math.abs(turn)) > 1) {
+            frontLeftPower   /= power + Math.abs(turn);
+            frontRightPower /= power + Math.abs(turn);
+            backLeftPower    /= power + Math.abs(turn);
+            backRightPower  /= power + Math.abs(turn);
+        }
+
+        /**
+         * Sets the wheel's power
+         * **/
+        leftFront.setPower(frontLeftPower);
+        leftRear.setPower(backLeftPower);
+        rightFront.setPower(frontRightPower);
+        rightRear.setPower(backRightPower);
     }
 
     @Override
