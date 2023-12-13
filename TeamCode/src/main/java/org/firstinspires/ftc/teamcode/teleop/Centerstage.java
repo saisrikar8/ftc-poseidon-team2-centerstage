@@ -3,9 +3,9 @@ package org.firstinspires.ftc.teamcode.teleop;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
+
 
 @TeleOp(name = "Centerstage")
 public class Centerstage extends LinearOpMode {
@@ -21,6 +21,7 @@ public class Centerstage extends LinearOpMode {
             drive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
             drive.moveRobot(-gamepad1.left_stick_y,gamepad1.left_stick_x, gamepad1.right_stick_x, gamepad1.right_bumper);
             if (gamepad2.a) {
+                telemetry.addData("Status", "Setting the pixel on the backdrop");
                 if (drive.armAngle < 57.5 || drive.armAngle > 62.5) {
                     drive.rotateArm((-1 * drive.armAngle) + 60);
                 }
