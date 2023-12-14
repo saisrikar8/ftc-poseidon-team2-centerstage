@@ -39,58 +39,79 @@ public class RedTopAutonomous extends LinearOpMode {
          */
             Pose2d firstEndPosition;
 
-            Trajectory traj1 = drive.trajectoryBuilder(new Pose2d(70, 10, Math.toRadians(180)))
+            Trajectory traj1 = drive.trajectoryBuilder(new Pose2d(10, -70, Math.toRadians(90)))
                     .forward(30)
                     .build();
             drive.followTrajectory(traj1);
-            drive.turn(-1 * Math.PI);
-            firstEndPosition = new Pose2d(traj1.end().getX(), traj1.end().getY(), 0);
+            drive.turn(0.5 * Math.PI);
+            firstEndPosition = traj1.end();
             if (detectProp()) {
                 propLocation = RedTapeMark.CENTER.getValue();
-                drive.moveSlide(8);
                 drive.openClaw1();
+                sleep(30);
+                drive.closeClaw1();
             } else {
                 drive.turn(Math.toRadians(-90));
                 Trajectory traj2 = drive.trajectoryBuilder(traj1.end())
                         .strafeLeft(10)
                         .build();
                 drive.followTrajectory(traj2);
-                drive.moveSlide(4);
                 if (detectProp()) {
                     propLocation = RedTapeMark.RIGHT.getValue();
                     drive.openClaw1();
-                    sleep(100);
+                    sleep(30);
                     drive.closeClaw1();
+                    firstEndPosition = traj2.end();
                 } else {
                     propLocation = RedTapeMark.LEFT.getValue();
-                    drive.rotateArm(0.5);
+                    Trajectory traj3 = drive.trajectoryBuilder(traj2.end())
+                            .strafeRight(10)
+                            .build();
+                    Trajectory traj4 = drive.trajectoryBuilder(traj3.end())
+                            .strafeRight(10)
+                            .build();
+                    drive.followTrajectory(traj3);
+                    drive.turn(Math.toRadians(-180));
+                    drive.followTrajectory(traj4);
                     drive.openClaw1();
-                    sleep(100);
+                    sleep(30);
                     drive.closeClaw1();
+                    firstEndPosition = traj4.end();
                 }
-                firstEndPosition = new Pose2d(traj2.end().getX(), traj2.end().getY(), Math.toRadians(90));
+
             }
-            Trajectory traj3 = drive.trajectoryBuilder(firstEndPosition)
-                    .splineTo(new Vector2d(60, 40), Math.toRadians(90))
-                    .splineTo(new Vector2d(40, 40), Math.toRadians(90))
+            Trajectory traj5 = drive.trajectoryBuilder(firstEndPosition)
+                    .strafeLeft(30)
                     .build();
-            drive.followTrajectory(traj3);
-            Trajectory traj4 = drive.trajectoryBuilder(traj3.end())
+            drive.followTrajectory(traj5);
+            Trajectory traj6 = drive.trajectoryBuilder(traj5.end())
+                    .forward(30)
+                    .build();
+            drive.followTrajectory(traj6);
+            Trajectory traj7 = drive.trajectoryBuilder(traj6.end())
                     .strafeLeft((propLocation - 3) * 5)
                     .strafeLeft((6 - propLocation) * 5 + 15)
-                    .build();
-            drive.followTrajectory(traj4);
-            Trajectory traj5 = drive.trajectoryBuilder(traj4.end())
+                    .build();;
+            while (determineIsCorrectPositionUsingPhoneCam()) {
+                drive.followTrajectory(traj7);
+            }
+            drive.moveSlide(drive.slidePos - 25);
+
+            Trajectory traj8 = drive.trajectoryBuilder(traj7.end())
                     .splineTo(new Vector2d(11, -33), Math.toRadians(270))
                     .splineTo(new Vector2d(-24, -57.5), Math.toRadians(180))
                     .build();
-            drive.followTrajectory(traj5);
+            drive.followTrajectory(traj8);
         }
     }
 
     public boolean detectProp(){
         TfodProcessor objectDetector = TfodProcessor.easyCreateWithDefaults();
-        VisionPortal visionPortal = VisionPortal.easyCreateWithDefaults(hardwareMap.get(WebcamName.class, "Webcam 1"), objectDetector);
+        VisionPortal visionPortal = new VisionPortal.Builder()
+                .addProcessor(objectDetector)
+                .setCamera(hardwareMap.get(WebcamName.class, "Webcam 1"))
+                .setCameraResolution(new Size(640, 480))
+                .build();
         if (objectDetector.getRecognitions().size() > 0 && objectDetector.getRecognitions().get(0).getConfidence() >= 0.9){
             return true;
         }
@@ -110,6 +131,9 @@ public class RedTopAutonomous extends LinearOpMode {
                 .build();
 
         //getting details of April tag
+        if (tagProcessor.getDetections().size() == 0){
+            return false;
+        }
         AprilTagDetection detection = tagProcessor.getDetections().get(0);
         int tagId = detection.id;
         if (propLocation == tagId) {
@@ -122,7 +146,7 @@ public class RedTopAutonomous extends LinearOpMode {
                 detectionPosition = detection.ftcPose;
             }
             //adjusting distance of robot from backdrop to minimize error
-            while (detectionPosition.y > 5){
+            while (detectionPosition.y > 3){
                 drive.moveRobot((detectionPosition.y - 4)/20, 0, 0, false);
                 detection = tagProcessor.getDetections().get(0);
                 detectionPosition = detection.ftcPose;
