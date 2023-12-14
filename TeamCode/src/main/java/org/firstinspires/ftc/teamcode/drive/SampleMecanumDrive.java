@@ -77,7 +77,7 @@ public class SampleMecanumDrive extends MecanumDrive {
     private List<DcMotorEx> motors;
 
     public Servo claw1, claw2;
-    private DcMotor linearSlide, armRotation;
+    public DcMotor linearSlide, armRotation;
 
     private BNO055IMU imu;
     private VoltageSensor batteryVoltageSensor;
@@ -111,6 +111,7 @@ public class SampleMecanumDrive extends MecanumDrive {
         claw2 = hardwareMap.get(Servo.class, "claw-2-servo");
         linearSlide = hardwareMap.get(DcMotorEx.class, "arm-extension");
         armRotation = hardwareMap.get(DcMotorEx.class, "arm-rotation");
+        armRotation.setDirection(DcMotorSimple.Direction.REVERSE);
 
         // TODO: If the hub containing the IMU you are using is mounted so that the "REV" logo does
         // not face up, remap the IMU axes so that the z-axis points upward (normal to the floor.)
