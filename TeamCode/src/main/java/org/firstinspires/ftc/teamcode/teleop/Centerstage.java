@@ -33,8 +33,8 @@ public class Centerstage extends LinearOpMode {
         }
         telemetry.addData("Status", "Ready to Drive. Use right stick to turn, left stick to move forward/backward/strafe on game pad 1. Use game pad 1 right bumper to change to snail mode");
         telemetry.update();
+        drive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         while (opModeIsActive()) {
-            drive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
             drive.moveRobot(-gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x, gamepad1.right_bumper);
             drive.linearSlide.setPower(gamepad2.left_stick_y);
             drive.armRotation.setPower(gamepad2.right_stick_x);
