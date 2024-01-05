@@ -108,12 +108,12 @@ public class SampleMecanumDrive extends MecanumDrive {
         rightFront = hardwareMap.get(DcMotorEx.class, "front-right");
         leftRear = hardwareMap.get(DcMotorEx.class, "rear-left");
         rightRear = hardwareMap.get(DcMotorEx.class, "rear-right");
-        //claw1 = hardwareMap.get(Servo.class, "claw-1-servo");
-        //claw2 = hardwareMap.get(Servo.class, "claw-2-servo");
-        //linearSlide = hardwareMap.get(DcMotorEx.class, "arm-extension");
-        //armRotation = hardwareMap.get(DcMotorEx.class, "arm-rotation");
-        //armRotation.setDirection(DcMotorSimple.Direction.REVERSE);
-        //linearSlide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        claw1 = hardwareMap.get(Servo.class, "claw-1-servo");
+        claw2 = hardwareMap.get(Servo.class, "claw-2-servo");
+        linearSlide = hardwareMap.get(DcMotorEx.class, "arm-extension");
+        armRotation = hardwareMap.get(DcMotorEx.class, "arm-rotation");
+        armRotation.setDirection(DcMotorSimple.Direction.REVERSE);
+        linearSlide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         // TODO: If the hub containing the IMU you are using is mounted so that the "REV" logo does
         // not face up, remap the IMU axes so that the z-axis points upward (normal to the floor.)
@@ -315,7 +315,15 @@ public class SampleMecanumDrive extends MecanumDrive {
     //height in inches
     public void moveSlide(double height) {
         double rotationsPerInch = 8.1/38.4;
-        linearSlide.setTargetPosition((int)(rotationsPerInch * height*TICKS_PER_REV));
+        double minimumHeight = 9.6;
+        double movement;
+        if (height < 0){
+            movement = minimumHeight + height;
+        }
+        else{
+            movement = minimumHeight - height;
+        }
+        linearSlide.setTargetPosition((int)(rotationsPerInch * movement*TICKS_PER_REV));
         linearSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         setSlidePos();
     }
