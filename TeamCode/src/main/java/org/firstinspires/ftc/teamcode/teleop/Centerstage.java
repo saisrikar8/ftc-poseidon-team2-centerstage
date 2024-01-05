@@ -96,7 +96,7 @@ public class Centerstage extends LinearOpMode {
             }
             if (gamepad2.left_bumper) {
                 telemetry.addData("Status", "Searching for April Tag");
-                drive.rotateArm((MAX_ROTATION - 30) - drive.armAngle);
+                drive.rotateArm(MAX_ROTATION - drive.armAngle);
                 AprilTagProcessor scanner = new AprilTagProcessor.Builder()
                         .setDrawCubeProjection(true)
                         .setDrawTagID(true)
@@ -135,7 +135,7 @@ public class Centerstage extends LinearOpMode {
                         detectionPosition = detection.ftcPose;
                         iterations++;
                     }
-                    drive.rotateArm(120 - drive.armAngle);
+                    drive.rotateArm(60 - drive.armAngle);
                     double desiredSlidePos = (detectionPosition.y / BACKDROP_LENGTH) * HIGH_TAPE;
                     drive.moveSlide(desiredSlidePos - drive.slidePos);
                 } else {
