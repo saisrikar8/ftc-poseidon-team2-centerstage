@@ -128,6 +128,7 @@ public class RedTopAutonomous extends LinearOpMode {
                     .back(95)
                     .build();
             drive.followTrajectory(traj10);
+            drive.turn(-180);
         }
     }
 

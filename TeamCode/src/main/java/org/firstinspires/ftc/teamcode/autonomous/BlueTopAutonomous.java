@@ -124,6 +124,7 @@ public class BlueTopAutonomous extends LinearOpMode {
                     .back(95)
                     .build();
             drive.followTrajectory(traj10);
+            drive.turn(180);
         }
     }
     public boolean detectProp(){
