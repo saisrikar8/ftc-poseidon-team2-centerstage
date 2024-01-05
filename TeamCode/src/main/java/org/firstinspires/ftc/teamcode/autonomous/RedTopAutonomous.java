@@ -141,7 +141,7 @@ public class RedTopAutonomous extends LinearOpMode {
         }
         return false;
     }
-        //evaluates whether the point on the backdrop is correct using the april tag
+    //evaluates whether the point on the backdrop is correct using the april tag
     public boolean determineIsCorrectPositionUsingPhoneCam(){
         AprilTagProcessor tagProcessor = new AprilTagProcessor.Builder()
                 .setDrawCubeProjection(true)

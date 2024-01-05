@@ -77,10 +77,6 @@ public class BlueTopAutonomous extends LinearOpMode {
                     drive.followTrajectory(traj5);
                     drive.turn(Math.toRadians(180));
                 }
-
-
-
-
             }
             Trajectory traj6 = drive.trajectoryBuilder(new Pose2d(10,60,0))
                     .splineTo(new Vector2d(40,40),0)
@@ -113,7 +109,7 @@ public class BlueTopAutonomous extends LinearOpMode {
                     drive.closeClaw2();
                 }
             }
-            sleep(2000);
+            sleep(2000)
             Trajectory traj9 = drive.trajectoryBuilder(new Pose2d(40,30+5*(3-propLocation),0))
                     .lineToSplineHeading(new Pose2d(30, -60, Math.PI))
                     .build();
