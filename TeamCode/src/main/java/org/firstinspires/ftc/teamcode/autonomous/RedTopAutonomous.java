@@ -36,18 +36,20 @@ public class RedTopAutonomous extends LinearOpMode {
         /*
          This while loop will run once the RUN button is clicked on the FTC App.
          */
-            Pose2d firstEndPosition;
 
             Trajectory traj1 = drive.trajectoryBuilder(new Pose2d(10, -70, Math.toRadians(90)))
                     .forward(30)
                     .build();
             drive.followTrajectory(traj1);
-            firstEndPosition = traj1.end();
             if (detectProp()) {
                 propLocation = RedTapeMark.CENTER.getValue();
                 drive.openClaw1();
                 sleep(30);
                 drive.closeClaw1();
+                drive.turn(-0.5 * Math.PI);
+                drive.followTrajectory(drive.trajectoryBuilder(traj1.end())
+                        .strafeRight(30)
+                        .build());
             } else {
                 drive.turn(Math.toRadians(-90));
                 Trajectory traj2 = drive.trajectoryBuilder(traj1.end())
@@ -59,7 +61,10 @@ public class RedTopAutonomous extends LinearOpMode {
                     drive.openClaw1();
                     sleep(30);
                     drive.closeClaw1();
-                    firstEndPosition = traj2.end();
+                    drive.followTrajectory(drive.trajectoryBuilder(traj2.end())
+                            .strafeRight(40)
+                            .build()
+                    );
                 } else {
                     propLocation = RedTapeMark.LEFT.getValue();
                     Trajectory traj3 = drive.trajectoryBuilder(traj2.end())
@@ -68,38 +73,61 @@ public class RedTopAutonomous extends LinearOpMode {
                     Trajectory traj4 = drive.trajectoryBuilder(traj3.end())
                             .strafeRight(10)
                             .build();
+                    Trajectory traj5 = drive.trajectoryBuilder(traj4.end())
+                            .strafeLeft(40)
+                            .build();
                     drive.followTrajectory(traj3);
                     drive.turn(Math.toRadians(-180));
                     drive.followTrajectory(traj4);
                     drive.openClaw1();
                     sleep(30);
                     drive.closeClaw1();
-                    firstEndPosition = traj4.end();
+                    drive.followTrajectory(traj5);
+                    drive.turn(Math.PI);
                 }
-
             }
-            Trajectory traj5 = drive.trajectoryBuilder(firstEndPosition)
-                    .strafeLeft(30)
+            Trajectory traj6 = drive.trajectoryBuilder(new Pose2d(10, -60, 0))
+                    .splineTo(new Vector2d(40, -40), 0)
                     .build();
-            drive.followTrajectory(traj5);
-            Trajectory traj6 = drive.trajectoryBuilder(traj5.end())
-                    .forward(30)
-                    .build();
+            drive.rotateArm(60);
             drive.followTrajectory(traj6);
-            Trajectory traj7 = drive.trajectoryBuilder(traj6.end())
-                    .strafeLeft((propLocation - 3) * 5)
-                    .strafeLeft((6 - propLocation) * 5 + 15)
-                    .build();;
-            while (determineIsCorrectPositionUsingPhoneCam()) {
-                drive.followTrajectory(traj7);
+            if (determineIsCorrectPositionUsingPhoneCam()){
+                drive.moveSlide(14);
+                drive.openClaw2();
+                sleep(30);
+                drive.closeClaw2();
             }
-            drive.moveSlide(drive.slidePos - 25);
-
-            Trajectory traj8 = drive.trajectoryBuilder(traj7.end())
-                    .splineTo(new Vector2d(11, -33), Math.toRadians(270))
-                    .splineTo(new Vector2d(-24, -57.5), Math.toRadians(180))
+            else{
+                Trajectory traj7 = drive.trajectoryBuilder(traj6.end())
+                        .strafeLeft(5)
+                        .build();
+                drive.followTrajectory(traj7);
+                if (determineIsCorrectPositionUsingPhoneCam()){
+                    drive.moveSlide(14);
+                    drive.openClaw2();
+                    sleep(30);
+                    drive.closeClaw2();
+                }
+                else{
+                    Trajectory traj8 = drive.trajectoryBuilder(traj7.end())
+                            .strafeLeft(5)
+                            .build();
+                    drive.followTrajectory(traj8);
+                    drive.moveSlide(14);
+                    drive.openClaw2();
+                    sleep(30);
+                    drive.closeClaw2();
+                }
+            }
+            sleep(2000);
+            Trajectory traj9 = drive.trajectoryBuilder(new Pose2d(40, -30 - 5*(propLocation - 4), 0))
+                    .strafeLeft(90 + 5*(propLocation - 4))
                     .build();
-            drive.followTrajectory(traj8);
+            drive.followTrajectory(traj9);
+            Trajectory traj10 = drive.trajectoryBuilder(traj9.end())
+                    .back(95)
+                    .build();
+            drive.followTrajectory(traj10);
         }
     }
 
