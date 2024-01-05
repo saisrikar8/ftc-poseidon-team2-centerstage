@@ -23,7 +23,6 @@ import org.firstinspires.ftc.vision.tfod.TfodProcessor;
 public class RedTopAutonomous extends LinearOpMode {
     private SampleMecanumDrive drive;
     private int propLocation;
-    private DistanceSensor propSensor;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -43,7 +42,6 @@ public class RedTopAutonomous extends LinearOpMode {
                     .forward(30)
                     .build();
             drive.followTrajectory(traj1);
-            drive.turn(0.5 * Math.PI);
             firstEndPosition = traj1.end();
             if (detectProp()) {
                 propLocation = RedTapeMark.CENTER.getValue();
