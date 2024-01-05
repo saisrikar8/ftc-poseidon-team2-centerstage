@@ -28,18 +28,22 @@ public class BlueTopAutonomous extends LinearOpMode {
         drive.setMotorPowers(1,1,1,1);
         waitForStart();
         while(opModeIsActive() && !isStopRequested()){
-            Pose2d firstendposition;
+
 
             Trajectory traj1 = drive.trajectoryBuilder(new Pose2d(10,70,Math.toRadians(270)))
                     .forward(30)
                     .build();
             drive.followTrajectory(traj1);
-            firstendposition = traj1.end();
             if(detectProp()){
                 propLocation = BlueTapeMark.CENTER.getValue();
                 drive.openClaw1();
                 sleep(30);
                 drive.closeClaw1();
+                drive.turn(Math.toRadians(-90));
+                drive.followTrajectory(drive.trajectoryBuilder(traj1.end())
+                        .strafeRight(30)
+                        .build());
+
             } else {
                 drive.turn(Math.toRadians(-90));
                 Trajectory traj2 = drive.trajectoryBuilder(traj1.end())
@@ -51,7 +55,10 @@ public class BlueTopAutonomous extends LinearOpMode {
                     drive.openClaw1();
                     sleep(30);
                     drive.closeClaw1();
-                    firstendposition = traj2.end();
+                    drive.followTrajectory(drive.trajectoryBuilder(traj2.end())
+                            .strafeRight(40)
+                            .build()
+                    );
                 }  else {
                     propLocation = BlueTapeMark.LEFT.getValue();
                     Trajectory traj3 = drive.trajectoryBuilder(traj2.end())
@@ -60,20 +67,63 @@ public class BlueTopAutonomous extends LinearOpMode {
                     Trajectory traj4 = drive.trajectoryBuilder(traj3.end())
                             .strafeRight(10)
                             .build();
+                    Trajectory traj5 = drive.trajectoryBuilder(traj4.end())
+                            .strafeLeft(40)
+                            .build();
                     drive.followTrajectory(traj3);
                     drive.turn(Math.toRadians(-180));
                     drive.followTrajectory(traj4);
                     drive.openClaw1();
                     sleep(30);
                     drive.closeClaw1();
-                    firstendposition = traj4.end();
+                    drive.followTrajectory(traj5);
+                    drive.turn(Math.toRadians(180));
                 }
 
 
 
+
             }
-
-
+            Trajectory traj6 = drive.trajectoryBuilder(new Pose2d(10,60,0))
+                    .splineTo(new Vector2d(40,40),0)
+                    .build();
+            drive.rotateArm(60);
+            drive.followTrajectory(traj6);
+            if(determineIsCorrectPositionUsingPhoneCam()){
+                drive.moveSlide(14);
+                drive.openClaw2();
+                sleep(30);
+                drive.closeClaw2();
+            } else {
+                Trajectory traj7 = drive.trajectoryBuilder(traj6.end())
+                        .strafeRight(5)
+                        .build();
+                drive.followTrajectory(traj7);
+                if(determineIsCorrectPositionUsingPhoneCam()){
+                    drive.moveSlide(14);
+                    drive.openClaw2();
+                    sleep(30);
+                    drive.closeClaw2();
+                } else {
+                    Trajectory traj8 = drive.trajectoryBuilder(traj7.end())
+                            .strafeRight(5)
+                            .build();
+                    drive.followTrajectory(traj8);
+                    drive.moveSlide(14);
+                    drive.openClaw2();
+                    sleep(30);
+                    drive.closeClaw2();
+                }
+            }
+            sleep(2000);
+            Trajectory traj9 = drive.trajectoryBuilder(new Pose2d(40,30+5*(3-propLocation),0))
+                    .strafeRight(90+5*(3-propLocation))
+                    .build();
+            drive.followTrajectory(traj9);
+            Trajectory traj10 = drive.trajectoryBuilder(traj9.end())
+                    .back(95)
+                    .build();
+            drive.followTrajectory(traj10);
         }
     }
     public boolean detectProp(){
