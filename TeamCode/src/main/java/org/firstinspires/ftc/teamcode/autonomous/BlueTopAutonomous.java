@@ -115,14 +115,13 @@ public class BlueTopAutonomous extends LinearOpMode {
             }
             sleep(2000);
             Trajectory traj9 = drive.trajectoryBuilder(new Pose2d(40,30+5*(3-propLocation),0))
-                    .strafeRight(90+5*(3-propLocation))
+                    .lineToSplineHeading(new Pose2d(30, -60, Math.PI))
                     .build();
             drive.followTrajectory(traj9);
             Trajectory traj10 = drive.trajectoryBuilder(traj9.end())
-                    .back(95)
+                    .forward(75)
                     .build();
             drive.followTrajectory(traj10);
-            drive.turn(180);
         }
     }
     public boolean detectProp(){
